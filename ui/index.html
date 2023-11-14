@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Transfer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+
+        #textInput {
+            width: 60%;
+            height: 300px;
+        }
+
+        #submit{
+            margin-top: 30px;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Text Transfer</h2>
+
+    <form id="textForm">
+        <label for="textInput">Enter Text:</label><br>
+        <textarea id="textInput" name="textInput" rows="4" cols="50"></textarea><br>
+        <div id="submit">
+            <input type="button" value="Submit" onclick="transferText()"> 
+        </div>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        function transferText() {
+            const userInput = document.getElementById("textInput").value;
+
+            // Send the user input to the server using fetch
+            var url = 'http://127.0.0.1:5000/get_text';
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ text: userInput }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display the result from the server
+                const resultElement = document.getElementById("result");
+                resultElement.innerHTML = `AI Detected Text: ${data[1]} %`;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+
+</body>
+</html>
